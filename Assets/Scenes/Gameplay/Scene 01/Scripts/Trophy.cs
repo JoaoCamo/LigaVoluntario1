@@ -31,7 +31,7 @@ public class Trophy : MonoBehaviour
     
     public void trophyFive()
     {
-        int spawn = Random.Range(0, GameManager.instance.thc.spawnPoints.Length);
+        int spawn = Random.Range(0, GameManager.instance.thc.spawnPoints.Count);
         Vector3 pos  = new Vector3(GameManager.instance.thc.spawnPoints[spawn].transform.position.x,1,GameManager.instance.thc.spawnPoints[spawn].transform.position.z);
         gameObject.transform.position = pos;
     }

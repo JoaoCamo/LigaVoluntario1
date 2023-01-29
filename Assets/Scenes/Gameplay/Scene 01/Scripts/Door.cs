@@ -5,9 +5,17 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public Animator doorAni;
+    public AudioSource source;
+    public AudioClip doorOpeningClip;
+    public bool opened = false;
 
     void OnTriggerEnter(Collider other)
     {
-        doorAni.SetTrigger("open");
-    }
+        if(!opened)
+        {
+            doorAni.SetTrigger("open");
+            source.PlayOneShot(doorOpeningClip);
+            opened = true;
+        }
+    }   
 }

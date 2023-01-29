@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         player.resetPosition();
         thc.clearTakenSpawns();
         thc.spawnTrophies();
+        closeAllDoors();
         points = 0;
         tic.timerOn = true;
         tic.timeLeft = 60;
@@ -63,5 +64,15 @@ public class GameManager : MonoBehaviour
         }
 
         bestTime = float.Parse(PlayerPrefs.GetString("Save"));
+    }
+
+    public void closeAllDoors()
+    {
+        foreach(GameObject door in GameObject.FindGameObjectsWithTag("Door"))
+        {
+            door.GetComponent<Door>().doorAni.ResetTrigger("open");
+            door.GetComponent<Door>().doorAni.SetTrigger("close");
+            door.GetComponent<Door>().opened = false;
+        }
     }
 }
