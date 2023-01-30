@@ -5,32 +5,46 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private float speed = 5f;
-    private float sensivity = 10f;
     public Animator pAni;
+    public Camera MainCamera;
+    private Vector3 lookAt;
+    private bool isMoving = false;
+
+    public AudioSource source;
+    public AudioClip stepSound;
 
     void Update()
     {
-        float moveInput = Input.GetAxis("Vertical");
-        float sideInput = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+        float moveX = Input.GetAxis("Horizontal");
+        var camrot = MainCamera.transform.rotation;
+        camrot.x = 0;
+        camrot.z = 0;
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookAt) * camrot, 5 * Time.deltaTime);
 
-        float mouseY = Input.GetAxis("Mouse X") * sensivity;
-
-        if(moveInput > 0 || moveInput < 0 || sideInput > 0 || sideInput < 0)
+        if(moveZ > 0 || moveZ < 0 || moveX > 0 || moveX < 0)
         {
+            isMoving = true;
             pAni.SetBool("moving", true);
-        } else if(moveInput == 0 && sideInput == 0)
+            transform.Translate(Vector3.forward * Time.deltaTime * speed * moveZ);
+            lookAt = new Vector3(moveX,0,moveZ);
+        } else if(moveZ == 0 && moveX == 0)
         {
+            isMoving = false;
             pAni.SetBool("moving", false);
         }
-
-        transform.Translate(Vector3.forward * Time.deltaTime * speed * moveInput);
-        transform.Translate(Vector3.right * Time.deltaTime * speed * sideInput);
-
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + mouseY, 0);
     }
 
     public void resetPosition()
     {
         transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
+    }
+
+    public void step()
+    {
+        if(isMoving)
+        {
+            source.PlayOneShot(stepSound);
+        }
     }
 }
