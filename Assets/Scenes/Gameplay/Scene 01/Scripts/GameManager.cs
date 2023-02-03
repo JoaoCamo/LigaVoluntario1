@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
         player.resetPosition();
-        thc.clearTakenSpawns();
+        thc.resetSpawnPoints();
         thc.spawnTrophies();
         closeAllDoors();
         points = 0;
